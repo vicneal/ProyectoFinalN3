@@ -109,24 +109,6 @@ class AdministradorModel extends Model
         $modificarMaestro->execute();
 
         header("Location: /administradores/maestros");
-
-        //consulta para obtener las clases en las que el maestro no fue asignado despues usaremos....
-        // $query = $this->db->prepare(
-        //     " SELECT id_clase
-        //                             FROM clases
-        //                             WHERE id_clase NOT IN (
-        //                                 SELECT c.id_clase
-        //                                 FROM maestros m
-        //                                 LEFT JOIN relacion_maestros_clases rc ON rc.id_maestro = m.id_maestro
-        //                                 LEFT JOIN clases c ON c.id_clase = rc.id_clase
-        //                                 WHERE m.id_maestro = :idMaestro)"
-        // );
-
-        // $query->bindParam(':idMaestro', $id_maestro);
-        // $query->execute();
-        // $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
     }
 
     public function insertMaestro($data)
@@ -164,6 +146,71 @@ class AdministradorModel extends Model
         $queryInsertRMC = $this->db->query("INSERT INTO Relacion_Maestros_Clases ( id_maestro, id_clase)
         VALUES('$ultimoIdMaestro','$claseAsignada')");
         header("Location: /administradores/maestros");
+    }
+    public function showAlumnos()
+    {
+        $res = $this->db->query(
+            "SELECT u.id_usuario,a.id_alumno, u.dni, u.nombre, u.apellido, u.correo_electronico, a.direccion , a.fecha_nacimiento  from usuarios u 
+            left join alumnos a on
+            a.id_usuario = u.id_usuario
+            where u.rol ='ALUMNO' AND activo =1"
+        );
+        $data = $res->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+    public function updateAlumnos($data)
+    {
+
+        $dni = $_POST["dni"];
+        $id_usuario = $_POST["id_usuario"];
+        $email = $_POST["email"];
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST["apellido"];
+
+        $id_alumno = $_POST["id_alumno"];
+        $direccion = $_POST["direccion"];
+        $fecha = $_POST["fecha"];
+
+        echo "$dni, $id_usuario, $id_alumno, $email, $nombre, $apellido, $direccion, $fecha";
+
+
+        $modificarAlumno = $this->db->prepare("update alumnos set direccion= :nuevaDireccion, fecha_nacimiento= :nuevaFecha where id_alumno = :idAlumno");
+        $modificarAlumno->bindParam(':nuevaDireccion', $direccion);
+        $modificarAlumno->bindParam(':nuevaFecha', $fecha);
+        $modificarAlumno->bindParam(':idAlumno', $id_alumno);
+        $modificarAlumno->execute();
+
+        $modificarUsuario = $this->db->prepare("update usuarios set dni= :dni, nombre= :nomb, apellido= :ape, correo_electronico = :email  where id_usuario = :idUsuario");
+        $modificarUsuario->bindParam(':dni', $dni);
+        $modificarUsuario->bindParam(':nomb', $nombre);
+        $modificarUsuario->bindParam(':ape', $apellido);
+        $modificarUsuario->bindParam(':email', $email);
+        $modificarUsuario->bindParam(':idUsuario', $id_usuario);
+        $modificarUsuario->execute();
+
+        header("Location: /administradores/alumnos");
+    }
+    public function insertAlumno($data)
+    {
+        //datos del nuevo usuario
+        $dni = $_POST["dni"];
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST["apellido"];
+        $email = $_POST["email"];
+        $contrasena = $_POST["dni"];
+        //datos alumno
+        $fecha = $_POST["fecha"];
+        $direccion = $_POST["direccion"];
+
+        $queryInsertUsuario = $this->db->query("INSERT INTO Usuarios ( dni, nombre, apellido, correo_electronico, contrasena, rol, activo) 
+        values('$dni','$nombre','$apellido','$email','$contrasena','AlUMNO','1')");
+
+        $ultimoIdUsuario = $this->db->lastInsertId();
+
+        $queryInsertAlumno = $this->db->query("INSERT INTO Alumnos ( id_usuario, fecha_nacimiento, direccion)
+        VALUES('$ultimoIdUsuario','$fecha','$direccion')");
+
+        header("Location: /administradores/alumnos");
     }
 
     // header("Location: /administradores/maestros");

@@ -47,4 +47,26 @@ class AdministradorController
 
         $this->model->insertMaestro($request);
     }
+
+    public function alumnosRead()
+    {
+        $alumnos = $this->model->showAlumnos();
+        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/alumno.php";
+    }
+    public function updateAlumnos($request)
+    {
+
+        $this->model->updateAlumnos($request);
+    }
+    public function insertAlumnos($request)
+    {
+
+        $this->model->insertAlumno($request);
+    }
+
+    public function clasesRead()
+    {
+        // $alumnos = $this->model->showAlumnos();
+        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/alumno.php";
+    }
 }

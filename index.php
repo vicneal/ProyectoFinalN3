@@ -30,7 +30,14 @@ if ($method === "POST") {
 
             $administradorController->insertMaestro($_POST);
             break;
+        case '/administradores/updateAlumno':
+            $administradorController->updateAlumnos($_POST);
 
+            break;
+        case '/administradores/insertAlumno':
+
+            $administradorController->insertAlumnos($_POST);
+            break;
         default:
             echo "NO ENCONTRAMOS LA RUTA";
             break;
@@ -47,6 +54,12 @@ if ($method === "GET") {
             break;
         case '/administradores/maestros':
             $administradorController->maestroRead();
+            break;
+        case '/administradores/alumnos':
+            $administradorController->alumnosRead();
+            break;
+        case '/administradores/clases':
+            $administradorController->clasesRead();
             break;
             // case '/index.php':
             //     $homeController->index();
