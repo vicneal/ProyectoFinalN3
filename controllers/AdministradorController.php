@@ -37,4 +37,14 @@ class AdministradorController
         $asignaturas = $this->model->asignaturas();
         include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/maestro.php";
     }
+    public function updateMaestros($request)
+    {
+
+        $this->model->updateMaestros($request);
+    }
+    public function insertMaestro($request)
+    {
+
+        $this->model->insertMaestro($request);
+    }
 }

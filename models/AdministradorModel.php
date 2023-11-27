@@ -17,7 +17,7 @@ class AdministradorModel extends Model
 
     public function update($data)
     {
-        $id = $_POST["id"];
+        $id = intval($_POST["id"]); //id del ususario
         $mail = $_POST["email"];
         $rol_modificado = $_POST["rol"];
         $estado = intval($_POST["estado"]);
@@ -30,65 +30,38 @@ class AdministradorModel extends Model
         $consultaPreparada->bindParam(':rol', $rol_modificado);
         $consultaPreparada->bindParam(':estado', $estado);
 
-        if ($consultaPreparada->execute()) {
-            // Verificamos el nuevo rol y realizamos la inserción o eliminación según sea necesario
-            if (($rol_modificado === 'MAESTRO' || $rol_modificado === 'ALUMNO' || $rol_modificado === 'ADMIN') && $rol_modificado !== $rol_antiguo) {
-                // Eliminamos el registro correspondiente si cambió a otro rol
-                $queryDelete = "";
-                $queryUpdateRol = "";
+        $consultaPreparada->execute();
+        if ($rol_antiguo == "ADMIN" && $rol_modificado == "MAESTRO") {
+            echo "vamos a insertar un nuevo maestro en la tabla maestro";
+            $insertarMaestro = $this->db->query("INSERT INTO maestros (id_usuario, fecha_nacimiento, direccion)
+            VALUES ($id, '2005-02-20', '')");
+            $ultimoIdMaestro = $this->db->lastInsertId();
+            $insertarNuevaRelacionMaestroClase = $this->db->query("insert into relacion_maestros_clases (id_maestro, id_clase) values('$ultimoIdMaestro',6)");
+        } else if ($rol_antiguo == "MAESTRO" && $rol_modificado == "ADMIN") {
 
-                if ($rol_antiguo === 'MAESTRO') {
-                    // Eliminamos el registro de la tabla maestros
-                    $queryDelete = "DELETE FROM maestros WHERE id_usuario = :id";
-                    // Eliminamos los registros relacionados en relacion_maestros_clases
-                    $queryDeleteRelacion = "DELETE FROM relacion_maestros_clases WHERE id_maestro = :id";
-                } elseif ($rol_antiguo === 'ALUMNO') {
-                    // Eliminamos el registro de la tabla alumnos
-                    $queryDelete = "DELETE FROM alumnos WHERE id_usuario = :id";
-                    // Eliminamos los registros relacionados en matricula_alumnos_clases
-                    $queryDeleteMatricula = "DELETE FROM matricula_alumnos_clases WHERE id_alumno = :id";
-                }
+            $idMaestro = $this->db->query("select m.id_maestro as id_maestro, u.id_usuario,u.nombre from maestros m
+            inner join usuarios u
+            on u.id_usuario = m.id_usuario
+            where u.id_usuario= $id");
+            $resultado = $idMaestro->fetch(PDO::FETCH_ASSOC);
 
-                // Ejecutamos las consultas si se han definido
-                if (!empty($queryDelete)) {
-                    $stmtDelete = $this->db->prepare($queryDelete);
-                    $stmtDelete->bindParam(':id', $id);
-                    $stmtDelete->execute();
-                }
+            $idMaestro = $resultado["id_maestro"];
 
-                if (!empty($queryUpdateRol)) {
-                    $stmtUpdateRol = $this->db->prepare($queryUpdateRol);
-                    $stmtUpdateRol->bindParam(':id', $id);
-                    $stmtUpdateRol->execute();
-                }
-
-                // Ejecutamos la consulta para eliminar los registros relacionados en relacion_maestros_clases
-                if (!empty($queryDeleteRelacion)) {
-                    $stmtDeleteRelacion = $this->db->prepare($queryDeleteRelacion);
-                    $stmtDeleteRelacion->bindParam(':id', $id);
-                    $stmtDeleteRelacion->execute();
-                }
-
-                // Ejecutamos la consulta para eliminar los registros relacionados en matricula_alumnos_clases
-                if (!empty($queryDeleteMatricula)) {
-                    $stmtDeleteMatricula = $this->db->prepare($queryDeleteMatricula);
-                    $stmtDeleteMatricula->bindParam(':id', $id);
-                    $stmtDeleteMatricula->execute();
-                }
-
-                // Puedes agregar más lógica aquí para otros roles si es necesario
-            }
-            header("Location: /administradores/permisos");
+            $queryEliminarRMC = $this->db->query("delete from relacion_maestros_clases where id_maestro = $idMaestro");
+            $queryEliminarMaestro = $this->db->query("delete from maestros where id_maestro = $idMaestro");
         }
+
+        header("Location: /administradores/permisos");
     }
 
     public function showTeachers()
     {
         $res = $this->db->query(
-            "   SELECT  u.nombre, u.apellido, u.correo_electronico,m.direccion, m.fecha_nacimiento, c.nombre as clase_asignada from usuarios u
-                                    inner join   maestros m on  m.id_usuario = u.id_usuario
+            "   SELECT u.id_usuario, m.id_maestro, rc.id_relacion, u.nombre, u.apellido, u.correo_electronico,m.direccion, m.fecha_nacimiento, c.nombre as clase_asignada from usuarios u
+                                    left join   maestros m on  m.id_usuario = u.id_usuario
                                     left join relacion_maestros_clases rc on rc.id_maestro = m.id_maestro
-                                    left join clases c on c.id_clase = rc.id_clase"
+                                    left join clases c on c.id_clase = rc.id_clase
+                                    where u.rol = 'MAESTRO' and u.activo = 1"
         );
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
@@ -96,8 +69,103 @@ class AdministradorModel extends Model
     public function asignaturas()
     {
 
-        $res = $this->db->query("select nombre from clases");
+        $res = $this->db->query("select id_clase, nombre from clases");
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
+    public function updateMaestros($data)
+    {
+        $id_usuario = $_POST["id_usuario"];
+        $id_maestro = $_POST["id_maestro"];
+        $id_relacion_maestro_clase = $_POST["id_relacion_maestro_clase"];
+        $email = $_POST["email"];
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST["apellido"];
+        $direccion = $_POST["direccion"];
+        $fecha = $_POST["fecha"];
+        $claseAsignada = $_POST["claseAsignada"];
+
+        echo "$id_usuario, $id_maestro, $id_relacion_maestro_clase, $email, $nombre, $apellido, $direccion, $fecha, $claseAsignada";
+
+        if ($id_relacion_maestro_clase !== $claseAsignada) {
+            $modificarRMC = $this->db->prepare("update relacion_maestros_clases set id_clase = :nuevaClase where id_relacion = :idRelacion;");
+            $modificarRMC->bindParam(':nuevaClase', $claseAsignada);
+            $modificarRMC->bindParam(':idRelacion', $id_relacion_maestro_clase);
+            $modificarRMC->execute();
+        }
+
+
+        $modificarMaestro = $this->db->prepare("update maestros set direccion= :nuevaDireccion, fecha_nacimiento= :nuevaFecha where id_maestro = :idMaestro");
+        $modificarMaestro->bindParam(':nuevaDireccion', $direccion);
+        $modificarMaestro->bindParam(':nuevaFecha', $fecha);
+        $modificarMaestro->bindParam(':idMaestro', $id_maestro);
+        $modificarMaestro->execute();
+
+        $modificarMaestro = $this->db->prepare("update usuarios set nombre= :nomb, apellido= :ape, correo_electronico = :email  where id_usuario = :idUsuario");
+        $modificarMaestro->bindParam(':nomb', $nombre);
+        $modificarMaestro->bindParam(':ape', $apellido);
+        $modificarMaestro->bindParam(':email', $email);
+        $modificarMaestro->bindParam(':idUsuario', $id_usuario);
+        $modificarMaestro->execute();
+
+        header("Location: /administradores/maestros");
+
+        //consulta para obtener las clases en las que el maestro no fue asignado despues usaremos....
+        // $query = $this->db->prepare(
+        //     " SELECT id_clase
+        //                             FROM clases
+        //                             WHERE id_clase NOT IN (
+        //                                 SELECT c.id_clase
+        //                                 FROM maestros m
+        //                                 LEFT JOIN relacion_maestros_clases rc ON rc.id_maestro = m.id_maestro
+        //                                 LEFT JOIN clases c ON c.id_clase = rc.id_clase
+        //                                 WHERE m.id_maestro = :idMaestro)"
+        // );
+
+        // $query->bindParam(':idMaestro', $id_maestro);
+        // $query->execute();
+        // $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+
+    public function insertMaestro($data)
+    {
+        var_dump($data);
+        //datos del nuevo usuario
+        $email = $_POST["email"];
+        $dni = $_POST["dni"];
+        $nombre = $_POST["nombre"];
+        $apellido = $_POST["apellido"];
+        $contrasena = $_POST["dni"];
+        //datos maestro
+        $fecha = $_POST["fecha"];
+        $direccion = $_POST["direccion"];
+        //dato clase
+        $claseAsignada = $_POST["claseAsignada"];
+
+        echo $claseAsignada;
+
+        $queryInsertUsuario = $this->db->query("INSERT INTO Usuarios ( dni, nombre, apellido, correo_electronico, contrasena, rol, activo) 
+        values('$dni','$nombre','$apellido','$email','$contrasena','MAESTRO','1')");
+
+        $ultimoIdUsuario = $this->db->lastInsertId();
+
+        $queryInsertMaestro = $this->db->query("INSERT INTO Maestros ( id_usuario, fecha_nacimiento, direccion)
+        VALUES('$ultimoIdUsuario','$fecha','$direccion')");
+
+        $ultimoIdMaestro = $this->db->lastInsertId();
+
+        if ($claseAsignada == "") {
+            $queryInsertRMC = $this->db->query("INSERT INTO Relacion_Maestros_Clases ( id_maestro, id_clase)
+        VALUES('$ultimoIdMaestro',6)");
+        }
+
+        $queryInsertRMC = $this->db->query("INSERT INTO Relacion_Maestros_Clases ( id_maestro, id_clase)
+        VALUES('$ultimoIdMaestro','$claseAsignada')");
+        header("Location: /administradores/maestros");
+    }
+
+    // header("Location: /administradores/maestros");
+
 }

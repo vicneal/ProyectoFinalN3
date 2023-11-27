@@ -193,10 +193,11 @@
                     <h3
                         class="block antialiased tracking-normal font-sans text-lg capitalize font-semibold leading-relaxed mb-5">
                         lista de maestros</h3>
-                    <button type=""
+                    <button type="" onclick='openModalInsert()'
                         class="bg-blue-500 text-white font-bold py-2 px-4 capitalize rounded mb-5  hover:bg-blue-400"><i
                             class="fa-solid fa-user-plus" style="color: #ffffff;"></i> agregar
                         maestro</button>
+
                 </div>
                 <div class="w-[95%] mx-auto">
                     <div
@@ -286,7 +287,7 @@
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
 
                                             <?php
-                                                if ($maestro["clase_asignada"] !== NULL) { ?>
+                                                if ($maestro["clase_asignada"] !== "Sin Asignación" && $maestro["clase_asignada"] !== Null) { ?>
                                             <p
                                                 class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
                                                 <?= $maestro["clase_asignada"] ?></p>
@@ -299,7 +300,7 @@
 
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <a href="#"
-                                                onclick='openModal("<?= $maestro["correo_electronico"] ?>" , "<?= $maestro["nombre"] ?>" , "<?= $maestro["apellido"] ?>" , "<?= $maestro["direccion"] ?>" , "<?= $maestro["fecha_nacimiento"] ?>" , "<?= $maestro["clase_asignada"] ?>" )'>
+                                                onclick='openModal("<?= $maestro["id_usuario"] ?>" ,"<?= $maestro["id_maestro"] ?>" ,"<?= $maestro["id_relacion"] ?>","<?= $maestro["correo_electronico"] ?>" , "<?= $maestro["nombre"] ?>" , "<?= $maestro["apellido"] ?>" , "<?= $maestro["direccion"] ?>" , "<?= $maestro["fecha_nacimiento"] ?>" , "<?= $maestro["clase_asignada"] ?>" )'>
                                                 <i class="fa-solid fa-pen-to-square text-[18px]"
                                                     style="color: #19d8e6;"></i>
                                             </a>
@@ -334,9 +335,13 @@
             <form action="/administradores/updateMaestro" method="post">
 
                 <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input type="text" hidden id="id_usuario" name="id_usuario">
+                    <input type="text" hidden id="id_maestro" name="id_maestro">
+                    <input type="text" hidden id="id_relacion_maestro_clase" name="id_relacion_maestro_clase">
+                    <input type="text" hidden id="emailEnvio" name="email">
                     <input
                         class="peer  w-full h-full  text-gray-800 font-sans font-normal bg-slate-300 outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="email" value="" id="email" disabled>
+                        placeholder=" " name="" value="" id="email" disabled>
                     <label
                         class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
                         Correo Electronico</label>
@@ -374,18 +379,108 @@
                         Fecha Nacimiento</label>
                 </div>
 
-                <!-- aca se realizara el campo clase asiganada -->
+                <!-- aca se realizara el campo clase asignada -->
                 <div class="my-8 flex justify-start items-center gap-3">
                     <p>Asignar clase</p>
                     <select id="claseAsignada" name="claseAsignada"
                         class="peer  w-2/5 h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500">
-                        <option value="" selected disabled
-                            class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white" id="clase">
+                        <option value="" selected class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white"
+                            id="clase">
                         </option>
                         <?php
 
                         foreach ($asignaturas as $asignatura) { ?>
-                        <option value="<?= $asignatura["nombre"] ?>"> <?= $asignatura["nombre"] ?> </option>
+                        <option value="<?= $asignatura["id_clase"] ?>"> <?= $asignatura["nombre"] ?> </option>
+                        <?php } ?>
+
+
+
+                    </select>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button class="bg-gray-600 text-white font-bold py-2 px-4 rounded mt-4 hover:bg-gray-400"
+                        onclick="closeModal()">Cerrar
+                    </button>
+                    <button type="submit"
+                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded mt-4 hover:bg-blue-400">Guardar
+                        Cambios</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- MODAL 2 INSERTAR MAESTRO -->
+    <div id="modalInsert"
+        class="fixed top-0 left-0 w-full h-full items-center justify-center hidden bg-black bg-opacity-50"
+        onclick="closeModalInsert()">
+        <div class="bg-white p-8 rounded-2xl shadow-md shadow-zinc-700 w-[500px]" onclick="event.stopPropagation();">
+
+            <h2 class="text-2xl font-bold mb-4 capitalize">editar maestro</h2>
+            <form action="/administradores/insertMaestro" method="post">
+
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="email" value="" id="email">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        Ingresar Email</label>
+
+                </div>
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="dni" value="" id="dni">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        Ingresar DNI</label>
+                </div>
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="nombre" value="" id="nombre">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        Ingresar Nombre(s)</label>
+                </div>
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="apellido" value="" id="apellido">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        Ingresar Apellido(s)</label>
+                </div>
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="direccion" value="" id="direccion">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        Ingresar Dirección</label>
+                </div>
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="fecha" value="" id="fecha" type="date">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        Ingresar Fecha Nacimiento</label>
+                </div>
+
+                <!-- aca se realizara el campo clase asignada -->
+                <div class="my-8 flex justify-start items-center gap-3">
+                    <p>Asignar clase</p>
+                    <select id="claseAsignada" name="claseAsignada"
+                        class="peer  w-2/5 h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500">
+                        <option value="" selected class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white"
+                            id="clase">Selecciona Clase
+                        </option>
+                        <?php
+
+                        foreach ($asignaturas as $asignatura) { ?>
+                        <option value="<?= $asignatura["id_clase"] ?>"> <?= $asignatura["nombre"] ?> </option>
                         <?php } ?>
 
 
@@ -406,8 +501,12 @@
     </div>
 
     <script>
-    function openModal(mail, nom, ape, dir, fecNacimiento, claseAsignada) {
+    function openModal(idUser, isMaestro, idRelacionMaestro_clase, mail, nom, ape, dir, fecNacimiento, claseAsignada) {
+        const id_usuario = document.getElementById('id_usuario');
+        const id_maestro = document.getElementById('id_maestro');
+        const id_relacion_maestro_clase = document.getElementById('id_relacion_maestro_clase');
         const email = document.getElementById('email');
+        const emailEnvio = document.getElementById('emailEnvio');
         const nombre = document.getElementById('nombre');
         const apellido = document.getElementById('apellido');
         const direcion = document.getElementById('direccion');
@@ -418,20 +517,19 @@
         document.getElementById('modal').classList.remove('hidden');
         document.getElementById('modal').classList.add('flex');
 
+        id_usuario.value = idUser;
+        id_maestro.value = isMaestro;
+
         email.value = mail;
+        emailEnvio.value = mail;
         nombre.value = nom;
         apellido.value = ape;
         direcion.value = dir;
         fecha_nacimiento.value = fecNacimiento;
 
-
-        if (claseAsignada !== "") {
-            clase.value = claseAsignada;
-            clase.innerText = claseAsignada;
-        } else {
-            clase.value = claseAsignada;
-            clase.innerText = "Sin Asignación";
-        }
+        id_relacion_maestro_clase.value = idRelacionMaestro_clase
+        clase.value = idRelacionMaestro_clase;
+        clase.innerText = claseAsignada;
 
 
     }
@@ -442,6 +540,24 @@
 
     function closeModal() {
         document.getElementById('modal').classList.add('hidden');
+    }
+
+    // modal insert maestro
+    function openModalInsert() {
+
+
+        document.getElementById('modalInsert').classList.remove('hidden');
+        document.getElementById('modalInsert').classList.add('flex');
+
+
+    }
+
+    function closeModalInsert() {
+        document.getElementById('modalInsert').classList.add('hidden');
+    }
+
+    function closeModalInsert() {
+        document.getElementById('modalInsert').classList.add('hidden');
     }
     </script>
 </body>

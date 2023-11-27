@@ -23,18 +23,14 @@ if ($method === "POST") {
 
             break;
         case '/administradores/updateMaestro':
-            var_dump($_POST);
+            $administradorController->updateMaestros($_POST);
 
             break;
-            // case '/empleados/delete':
-            //     $empleadoController->delete($_POST["id"]);
-            //     break;
-            // case '/empleados/create':
-            //     $empleadoController->store($_POST);
-            //     break;
-            // case '/empleados/update':
-            //     $empleadoController->update($_POST);
-            //     break;
+        case '/administradores/insertMaestro':
+
+            $administradorController->insertMaestro($_POST);
+            break;
+
         default:
             echo "NO ENCONTRAMOS LA RUTA";
             break;
