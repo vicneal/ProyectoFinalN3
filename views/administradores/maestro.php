@@ -259,7 +259,7 @@
                                     $numeracion = 1;
                                     foreach ($maestros as $maestro) {
                                     ?>
-                                    <tr>
+                                    <tr class=" hover:bg-[#c3dff9]">
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <p class="block antialiased font-sans text-xs text-blue-gray-900 font-bold">
                                                 <?= $numeracion++ ?></p>
@@ -298,11 +298,15 @@
                                             <?php   } ?>
                                         </td>
 
-                                        <td class="py-2 px-5 border-b border-blue-gray-50">
+                                        <td class="py-2 px-5 border-b border-blue-gray-50 ">
                                             <a href="#"
                                                 onclick='openModal("<?= $maestro["id_usuario"] ?>" ,"<?= $maestro["id_maestro"] ?>" ,"<?= $maestro["id_relacion"] ?>","<?= $maestro["correo_electronico"] ?>" , "<?= $maestro["nombre"] ?>" , "<?= $maestro["apellido"] ?>" , "<?= $maestro["direccion"] ?>" , "<?= $maestro["fecha_nacimiento"] ?>" , "<?= $maestro["clase_asignada"] ?>" )'>
-                                                <i class="fa-solid fa-pen-to-square text-[18px]"
-                                                    style="color: #19d8e6;"></i>
+                                                <i
+                                                    class="fa-solid fa-pen-to-square text-[18px] text-[#19d8e6] hover:text-[#6db4b9]"></i>
+                                            </a>
+                                            <a href="#" class="ml-3">
+                                                <i
+                                                    class="fa-regular fa-trash-can text-[18px] hover:text-red-900 text-[#dc667a]"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -314,15 +318,7 @@
                     </div>
                 </div>
             </div>
-            <div class="text-blue-gray-600">
-                <footer class="py-2">
-                    <div class="flex w-full flex-wrap items-center justify-center gap-6 px-2 md:justify-between">
-                        <p class="block antialiased font-sans text-sm leading-normal font-normal text-inherit">© 2023,
-                            made with
 
-                    </div>
-                </footer>
-            </div>
         </div>
     </div>
 

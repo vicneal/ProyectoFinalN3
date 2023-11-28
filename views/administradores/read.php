@@ -244,7 +244,7 @@
                                     $numeracion = 1;
                                     foreach ($usuarios as $usuario) {
                                     ?>
-                                    <tr>
+                                    <tr class=" hover:bg-[#c3dff9]">
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
 
                                             <p class="block antialiased font-sans text-xs text-blue-gray-900 font-bold">
