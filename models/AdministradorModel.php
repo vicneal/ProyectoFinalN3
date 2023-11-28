@@ -166,6 +166,26 @@ class AdministradorModel extends Model
 
         header("Location: /administradores/maestros");
     }
+    public function deleteMaestro($id)
+    {
+        $id_usuario = intval($_GET["id"]);
+
+        $idMaestro = $this->db->query("select m.id_maestro as id_maestro, u.id_usuario,u.nombre from maestros m
+        inner join usuarios u
+        on u.id_usuario = m.id_usuario
+        where u.id_usuario= $id_usuario");
+        $resultado = $idMaestro->fetch(PDO::FETCH_ASSOC);
+
+        $idMaestro = intval($resultado["id_maestro"]);
+
+        echo $idMaestro;
+
+        $queryEliminarRMC = $this->db->query("delete from relacion_maestros_clases where id_maestro = $idMaestro");
+        $queryEliminarMaestro = $this->db->query("delete from  maestros  where id_maestro= $idMaestro");
+        $eliminarUsuario = $this->db->query("delete from usuarios where id_usuario= $id_usuario");
+
+        header("Location: /administradores/maestros");
+    }
 
     public function insertMaestro($data)
     {
@@ -209,7 +229,7 @@ class AdministradorModel extends Model
             "SELECT u.id_usuario,a.id_alumno, u.dni, u.nombre, u.apellido, u.correo_electronico, a.direccion , a.fecha_nacimiento  from usuarios u 
             left join alumnos a on
             a.id_usuario = u.id_usuario
-            where u.rol ='ALUMNO' AND activo =1"
+            where u.rol ='ALUMNO' "
         );
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
@@ -246,6 +266,27 @@ class AdministradorModel extends Model
 
         header("Location: /administradores/alumnos");
     }
+    public function deleteAlumno($id)
+    {
+        $id_usuario = intval($_GET["id"]);
+        echo "$id_usuario";
+
+        $idAlumno = $this->db->query("select a.id_alumno as id_alumno, u.id_usuario,u.nombre from alumnos a
+            inner join usuarios u
+            on u.id_usuario = a.id_usuario
+            where u.id_usuario= $id_usuario");
+        $resultado = $idAlumno->fetch(PDO::FETCH_ASSOC);
+
+        $idAlumno = $resultado["id_alumno"];
+
+        echo "$idAlumno";
+
+        $queryEliminarMAC = $this->db->query("delete from matricula_alumnos_clases where id_alumno = $idAlumno");
+        $queryEliminarAlumno = $this->db->query("delete from alumnos where id_alumno = $idAlumno");
+        $eliminarUsuario = $this->db->query("delete from usuarios where id_usuario= $id_usuario");
+
+        header("Location: /administradores/alumnos");
+    }
     public function insertAlumno($data)
     {
         //datos del nuevo usuario
@@ -258,6 +299,7 @@ class AdministradorModel extends Model
         $fecha = $_POST["fecha"];
         $direccion = $_POST["direccion"];
 
+        var_dump($data);
         $queryInsertUsuario = $this->db->query("INSERT INTO Usuarios ( dni, nombre, apellido, correo_electronico, contrasena, rol, activo) 
         values('$dni','$nombre','$apellido','$email','$contrasena','AlUMNO','1')");
 
@@ -266,6 +308,12 @@ class AdministradorModel extends Model
         $queryInsertAlumno = $this->db->query("INSERT INTO Alumnos ( id_usuario, fecha_nacimiento, direccion)
         VALUES('$ultimoIdUsuario','$fecha','$direccion')");
 
+
+        $ultimoIdAlumno = $this->db->lastInsertId();
+
+        $queryInsertMAC = $this->db->query("INSERT INTO Matricula_Alumnos_Clases ( id_alumno, id_clase, calificacion)
+        VALUES( '$ultimoIdAlumno', 6, NULL)");
+
         header("Location: /administradores/alumnos");
     }
     public function readClase()
@@ -273,7 +321,8 @@ class AdministradorModel extends Model
         $res = $this->db->query(
             "SELECT 
             c.id_clase,
-             rmc.id_relacion,
+            rmc.id_relacion,
+            mac.id_matricula,
             c.nombre AS nombre_clase,
             m.id_maestro,
             CONCAT(u.nombre, ' ', u.apellido) AS nombre_maestro,
@@ -283,7 +332,7 @@ class AdministradorModel extends Model
         inner JOIN maestros m ON rmc.id_maestro = m.id_maestro
         LEFT JOIN usuarios u ON m.id_usuario = u.id_usuario
         LEFT JOIN matricula_Alumnos_Clases mac ON c.id_clase = mac.id_clase
-        GROUP BY c.id_clase, m.id_maestro, nombre_maestro,rmc.id_relacion
+        GROUP BY c.id_clase, m.id_maestro, nombre_maestro,rmc.id_relacion,mac.id_matricula
         ORDER BY c.id_clase"
         );
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
@@ -351,6 +400,13 @@ class AdministradorModel extends Model
         VALUES( '$maestroAsignado', '$ultimoIdClase')");
 
         header("Location: /administradores/clases");
+    }
+    public function deleteClase($data)
+    {
+
+        //array(3) { ["id"]=> string(2) "10" ["id_rcm"]=> string(2) "35" ["id_mac"]=> string(0) "" } id_mac me da un string vacio cuandono hay alumnos inscritos en esa clase
+
+        header("Location: /administradores/alumnos");
     }
     // header("Location: /administradores/maestros");
 

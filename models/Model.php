@@ -21,7 +21,7 @@ class Model
      */
     public function all()
     {
-        $res = $this->db->query("select * from {$this->table} where id_usuario <> 16");
+        $res = $this->db->query("select * from {$this->table} where id_usuario <> 16 and rol <> 'ELIMINADO'");
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }

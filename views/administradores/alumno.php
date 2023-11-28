@@ -297,7 +297,8 @@
                                                 <i
                                                     class="fa-solid fa-pen-to-square text-[18px] text-[#19d8e6] hover:text-[#6db4b9]"></i>
                                             </a>
-                                            <a href="#" class="ml-3">
+                                            <a href="/administradores/deleteAlumno?id=<?= $alumno["id_usuario"] ?>"
+                                                class="ml-3">
                                                 <i
                                                     class="fa-regular fa-trash-can text-[18px] hover:text-red-900 text-[#dc667a]"></i>
                                             </a>

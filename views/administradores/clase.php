@@ -292,11 +292,12 @@
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <a href="#"
-                                                onclick='openModal("<?= $clase["id_clase"] ?>" ,"<?= $clase["id_maestro"] ?>" , "<?= $clase["nombre_clase"] ?>","<?= $clase["nombre_maestro"] ?>","<?= $clase["id_relacion"] ?>" )'>
+                                                onclick='openModal("<?= $clase["id_clase"] ?>" ,"<?= $clase["id_maestro"] ?>" , "<?= $clase["nombre_clase"] ?>","<?= $clase["nombre_maestro"] ?>","<?= $clase["id_relacion"] ?>","<?= $clase["id_matricula"] ?>" )'>
                                                 <i
                                                     class="fa-solid fa-pen-to-square text-[18px] text-[#19d8e6] hover:text-[#6db4b9]"></i>
                                             </a>
-                                            <a href="#" class="ml-3">
+                                            <a href="/administradores/deleteClase?id=<?= $clase["id_clase"] ?>&id_rcm=<?= $clase["id_relacion"] ?>&id_mac=<?= $clase["id_matricula"] ?>"
+                                                class="ml-3">
                                                 <i
                                                     class="fa-regular fa-trash-can text-[18px] hover:text-red-900 text-[#dc667a]"></i>
                                             </a>

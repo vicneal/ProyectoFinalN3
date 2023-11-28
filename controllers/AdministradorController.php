@@ -47,6 +47,11 @@ class AdministradorController
 
         $this->model->insertMaestro($request);
     }
+    public function deleteMaestro($request)
+    {
+
+        $this->model->deleteMaestro($request);
+    }
 
     public function alumnosRead()
     {
@@ -58,10 +63,16 @@ class AdministradorController
 
         $this->model->updateAlumnos($request);
     }
+
     public function insertAlumnos($request)
     {
 
         $this->model->insertAlumno($request);
+    }
+    public function deleteAlumno($request)
+    {
+
+        $this->model->deleteAlumno($request);
     }
 
     public function clasesRead()
@@ -74,6 +85,11 @@ class AdministradorController
     {
 
         $this->model->updateClase($request);
+    }
+    public function deleteClase($request)
+    {
+
+        $this->model->deleteClase($request);
     }
     public function insertClase($request)
     {

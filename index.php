@@ -71,6 +71,18 @@ if ($method === "GET") {
         case '/administradores/clases':
             $administradorController->clasesRead();
             break;
+        case '/administradores/deleteMaestro':
+            $administradorController->deleteMaestro($_GET);
+
+            break;
+        case '/administradores/deleteAlumno':
+            $administradorController->deleteAlumno($_GET);
+
+            break;
+        case '/administradores/deleteClase':
+            $administradorController->deleteClase($_GET);
+
+            break;
             // case '/index.php':
             //     $homeController->index();
             //     break;

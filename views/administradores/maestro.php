@@ -304,7 +304,8 @@
                                                 <i
                                                     class="fa-solid fa-pen-to-square text-[18px] text-[#19d8e6] hover:text-[#6db4b9]"></i>
                                             </a>
-                                            <a href="#" class="ml-3">
+                                            <a href="/administradores/deleteMaestro?id=<?= $maestro["id_usuario"] ?>"
+                                                class="ml-3">
                                                 <i
                                                     class="fa-regular fa-trash-can text-[18px] hover:text-red-900 text-[#dc667a]"></i>
                                             </a>
@@ -380,7 +381,7 @@
                     <p>Asignar clase</p>
                     <select id="claseAsignada" name="claseAsignada"
                         class="peer  w-2/5 h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500">
-                        <option value="" selected class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white"
+                        <option value="6" selected class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white"
                             id="clase">
                         </option>
                         <?php
@@ -470,7 +471,7 @@
                     <p>Asignar clase</p>
                     <select id="claseAsignada" name="claseAsignada"
                         class="peer  w-2/5 h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500">
-                        <option value="" selected class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white"
+                        <option value="6" selected class="capitalize py-2 bg-slate-500  focus:bg-slate-500 text-white"
                             id="clase">Selecciona Clase
                         </option>
                         <?php
