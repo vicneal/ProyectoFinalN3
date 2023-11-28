@@ -66,7 +66,8 @@ class AdministradorController
 
     public function clasesRead()
     {
-        // $alumnos = $this->model->showAlumnos();
-        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/alumno.php";
+        $clases = $this->model->readClase();
+        $maestros = $this->model->maestrosList();
+        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/clase.php";
     }
 }

@@ -85,7 +85,7 @@ class AdministradorModel extends Model
         $fecha = $_POST["fecha"];
         $claseAsignada = $_POST["claseAsignada"];
 
-        echo "$id_usuario, $id_maestro, $id_relacion_maestro_clase, $email, $nombre, $apellido, $direccion, $fecha, $claseAsignada";
+        // echo "$id_usuario, $id_maestro, $id_relacion_maestro_clase, $email, $nombre, $apellido, $direccion, $fecha, $claseAsignada";
 
         if ($id_relacion_maestro_clase !== $claseAsignada) {
             $modificarRMC = $this->db->prepare("update relacion_maestros_clases set id_clase = :nuevaClase where id_relacion = :idRelacion;");
@@ -211,6 +211,34 @@ class AdministradorModel extends Model
         VALUES('$ultimoIdUsuario','$fecha','$direccion')");
 
         header("Location: /administradores/alumnos");
+    }
+    public function readClase()
+    {
+        $res = $this->db->query(
+            "SELECT 
+            c.id_clase,
+            c.nombre AS nombre_clase,
+            m.id_maestro,
+            CONCAT(u.nombre, ' ', u.apellido) AS nombre_maestro,
+            COUNT(DISTINCT mac.id_alumno) AS cantidad_alumnos
+        FROM clases c
+        LEFT JOIN relacion_Maestros_Clases rmc ON c.id_clase = rmc.id_clase
+        LEFT JOIN maestros m ON rmc.id_maestro = m.id_maestro
+        LEFT JOIN usuarios u ON m.id_usuario = u.id_usuario
+        LEFT JOIN matricula_Alumnos_Clases mac ON c.id_clase = mac.id_clase
+        GROUP BY c.id_clase, m.id_maestro, nombre_maestro
+        ORDER BY c.id_clase"
+        );
+        $data = $res->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+    public function maestrosList()
+    {
+
+        $res = $this->db->query("select u.nombre as nombre_maestro, u.id_usuario ,m.id_maestro from usuarios u
+        inner join maestros m on m.id_usuario = u.id_usuario");
+        $data = $res->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
 
     // header("Location: /administradores/maestros");

@@ -38,6 +38,10 @@ if ($method === "POST") {
 
             $administradorController->insertAlumnos($_POST);
             break;
+        case '/administradores/updateClase':
+
+            var_dump($_POST);
+            break;
         default:
             echo "NO ENCONTRAMOS LA RUTA";
             break;

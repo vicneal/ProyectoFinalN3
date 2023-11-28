@@ -224,27 +224,17 @@
                                         <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
                                             <p
                                                 class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
-                                                DNI</p>
+                                                clase</p>
                                         </th>
                                         <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
                                             <p
                                                 class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
-                                                nombre</p>
+                                                maestro</p>
                                         </th>
                                         <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
                                             <p
                                                 class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
-                                                email</p>
-                                        </th>
-                                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
-                                            <p
-                                                class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
-                                                dirección</p>
-                                        </th>
-                                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
-                                            <p
-                                                class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
-                                                fecha. de nacimiento</p>
+                                                alumnos inscritos</p>
                                         </th>
 
                                         <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
@@ -258,7 +248,7 @@
                                 <tbody>
                                     <?php
                                     $numeracion = 1;
-                                    foreach ($alumnos as $alumno) {
+                                    foreach ($clases as $clase) {
                                     ?>
                                     <tr>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
@@ -268,32 +258,41 @@
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <p
                                                 class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumno["dni"] ?></p>
+                                                <?= $clase["nombre_clase"] ?></p>
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
+                                            <?php
+                                                if ($clase["nombre_maestro"] == NULL) { ?>
+                                            <p
+                                                class="inline-block py-[2px] px-[6px] rounded-md antialiased font-sans text-xs capitalize  font-bold bg-[#fcbf14]">
+                                                Sin asignación</p>
+                                            <?php     } else {
+                                                ?>
                                             <p
                                                 class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumno["nombre"] ?> <?= $alumno["apellido"] ?></p>
-                                        </td>
-                                        <td class="py-2 px-5 border-b border-blue-gray-50">
-                                            <p
-                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumno["correo_electronico"] ?></p>
-                                        </td>
-                                        <td class="py-2 px-5 border-b border-blue-gray-50">
-                                            <p
-                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumno["direccion"] ?></p>
-                                        </td>
-                                        <td class="py-2 px-5 border-b border-blue-gray-50">
-                                            <p
-                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumno["fecha_nacimiento"] ?></p>
-                                        </td>
+                                                <?= $clase["nombre_maestro"] ?></p>
+                                            <?php      }
+                                                ?>
 
+                                        </td>
+                                        <td class="py-2 px-5 border-b border-blue-gray-50">
+
+                                            <?php
+                                                if ($clase["cantidad_alumnos"] == 0) { ?>
+                                            <p
+                                                class="inline-block py-[2px] px-[6px] rounded-md antialiased font-sans text-xs capitalize  font-bold bg-[#fcbf14]">
+                                                Sin alumnos</p>
+                                            <?php     } else {
+                                                ?>
+                                            <p
+                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
+                                                <?= $clase["cantidad_alumnos"] ?></p>
+                                            <?php      }
+                                                ?>
+                                        </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <a href="#"
-                                                onclick='openModal("<?= $alumno["id_usuario"] ?>" ,"<?= $alumno["id_alumno"] ?>" ,"<?= $alumno["dni"] ?>","<?= $alumno["nombre"] ?>" , "<?= $alumno["apellido"] ?>" , "<?= $alumno["correo_electronico"] ?>" , "<?= $alumno["direccion"] ?>" , "<?= $alumno["fecha_nacimiento"] ?>" )'>
+                                                onclick='openModal("<?= $clase["id_clase"] ?>" ,"<?= $clase["id_maestro"] ?>" , "<?= $clase["nombre_clase"] ?>","<?= $clase["nombre_maestro"] ?>" )'>
                                                 <i class="fa-solid fa-pen-to-square text-[18px]"
                                                     style="color: #19d8e6;"></i>
                                             </a>
@@ -324,60 +323,33 @@
         onclick="closeModal()">
         <div class="bg-white p-8 rounded-2xl shadow-md shadow-zinc-700 w-[500px]" onclick="event.stopPropagation();">
 
-            <h2 class="text-2xl font-bold mb-4 capitalize">editar alumno</h2>
-            <form action="/administradores/updateAlumno" method="post">
-                <div class="relative w-full min-w-[200px] h-10 my-8">
-                    <input
-                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="dni" value="" id="dni">
-                    <label
-                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                        DNI</label>
-                </div>
-                <div class="relative w-full min-w-[200px] h-10 my-8">
-                    <input type="text" hidden id="id_usuario" name="id_usuario">
-                    <input type="text" hidden id="id_alumno" name="id_alumno">
-                    <input type="text" hidden id="emailEnvio" name="email">
-                    <input
-                        class="peer  w-full h-full  text-gray-800 font-sans font-normal bg-slate-300 outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="" value="" id="email" disabled>
-                    <label
-                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                        Correo Electronico</label>
-                </div>
-                <div class="relative w-full min-w-[200px] h-10 my-8">
-                    <input
-                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="nombre" value="" id="nombre">
-                    <label
-                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                        Nombre(s)</label>
-                </div>
-                <div class="relative w-full min-w-[200px] h-10 my-8">
-                    <input
-                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="apellido" value="" id="apellido">
-                    <label
-                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                        Apellido(s)</label>
-                </div>
-                <div class="relative w-full min-w-[200px] h-10 my-8">
-                    <input
-                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="direccion" value="" id="direccion">
-                    <label
-                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                        Dirección</label>
-                </div>
-                <div class="relative w-full min-w-[200px] h-10 my-8">
-                    <input
-                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="fecha" value="" id="fecha" type="date">
-                    <label
-                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                        Fecha Nacimiento</label>
-                </div>
+            <h2 class="text-2xl font-bold mb-4 capitalize">editar clase</h2>
+            <form action="/administradores/updateClase" method="post">
 
+                <div class="relative w-full min-w-[200px] h-10 my-8">
+                    <input type="text" name="id_clase" id="id_clase" hidden>
+                    <input type="text" name="id_maestro" id="id_maestro" hidden>
+                    <input
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
+                        placeholder=" " name="nombre_clase" value="" id="nombre_clase">
+                    <label
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+                        nombre de la clase</label>
+                </div>
+                <div class="relative w-full min-w-[200px] h-10  my-8">
+                    <label for="maestroAsignado"
+                        class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">Maestro
+                        Asignado:</label>
+                    <select id="maestroAsignado" name="maestroAsignado"
+                        class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500">
+                        <option value="" class="capitalize py-2 bg-transparent  focus:bg-slate-500 text-gray-700"
+                            id="nombreMaestro"></option>
+                        <?php
+                        foreach ($maestros as $maestro) { ?>
+                        <option value="<?= $maestro["id_maestro"] ?>"> <?= $maestro["nombre_maestro"] ?> </option>
+                        <?php } ?>
+                    </select>
+                </div>
                 <div class="flex justify-end gap-4">
                     <button class="bg-gray-600 text-white font-bold py-2 px-4 rounded mt-4 hover:bg-gray-400"
                         onclick="closeModal()">Cerrar
@@ -462,29 +434,29 @@
     </div>
 
     <script>
-    function openModal(idUser, isAlumno, dnii, nom, ape, mail, dir, fecNacimiento) {
-        const id_usuario = document.getElementById('id_usuario');
-        const id_alumno = document.getElementById('id_alumno');
-        const dni = document.getElementById('dni');
-        const email = document.getElementById('email');
-        const emailEnvio = document.getElementById('emailEnvio');
-        const nombre = document.getElementById('nombre');
-        const apellido = document.getElementById('apellido');
-        const direcion = document.getElementById('direccion');
-        const fecha_nacimiento = document.getElementById('fecha');
+    function openModal(idClase, isMaestro, nombreClase, nombreMaestro) {
+        const id_clase = document.getElementById('id_clase');
+        const id_maestro = document.getElementById('id_maestro');
+        const nombre_clase = document.getElementById('nombre_clase');
+        const nombre_maestro = document.getElementById('nombreMaestro');
+        const sinAsignacion = "Sin Asignación";
 
         document.getElementById('modal').classList.remove('hidden');
         document.getElementById('modal').classList.add('flex');
+        console.log(nombreMaestro.length);
 
-        id_usuario.value = idUser;
-        id_alumno.value = isAlumno;
-        dni.value = dnii;
-        email.value = mail;
-        emailEnvio.value = mail;
-        nombre.value = nom;
-        apellido.value = ape;
-        direcion.value = dir;
-        fecha_nacimiento.value = fecNacimiento;
+        id_clase.value = idClase;
+        id_maestro.value = isMaestro;
+        nombre_clase.value = nombreClase;
+        nombre_maestro.value = nombreMaestro;
+        if (nombreMaestro == "") {
+            console.log(sinAsignacion)
+            nombre_maestro.innerHTML = sinAsignacion;
+        } else {
+            nombre_maestro.innerText = nombreMaestro;
+        }
+
+        // nombre_maestro.innerText = "Sin asignación";
 
     }
 
