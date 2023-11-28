@@ -25,14 +25,14 @@ class AdministradorModel extends Model
 
         // Actualizar el rol en la tabla Usuarios
         $consultaPreparada = $this->db->prepare("UPDATE {$this->table} SET correo_electronico = :email, rol = :rol, activo = :estado WHERE id_usuario = :id");
-        $consultaPreparada->bindParam(':id', $id);
+        $consultaPreparada->bindParam(':id', $id); //id del usuario
         $consultaPreparada->bindParam(':email', $mail);
         $consultaPreparada->bindParam(':rol', $rol_modificado);
         $consultaPreparada->bindParam(':estado', $estado);
 
         $consultaPreparada->execute();
         if ($rol_antiguo == "ADMIN" && $rol_modificado == "MAESTRO") {
-            echo "vamos a insertar un nuevo maestro en la tabla maestro";
+            //echo "vamos a insertar un nuevo maestro en la tabla maestros";
             $insertarMaestro = $this->db->query("INSERT INTO maestros (id_usuario, fecha_nacimiento, direccion)
             VALUES ($id, '2005-02-20', '')");
             $ultimoIdMaestro = $this->db->lastInsertId();
@@ -49,6 +49,62 @@ class AdministradorModel extends Model
 
             $queryEliminarRMC = $this->db->query("delete from relacion_maestros_clases where id_maestro = $idMaestro");
             $queryEliminarMaestro = $this->db->query("delete from maestros where id_maestro = $idMaestro");
+        } else if ($rol_antiguo == "ADMIN" && $rol_modificado == "ALUMNO") {
+            echo "vamos a insertar un nuevo alumno en la tabla alumnos";
+            $insertarAlumno = $this->db->query("INSERT INTO alumnos (id_usuario, fecha_nacimiento, direccion)
+            VALUES ($id, '2000-02-20', '')");
+            $ultimoIdAlumno = $this->db->lastInsertId();
+            $insertarNuevMmatricula_alumnos_clases = $this->db->query("INSERT INTO Matricula_Alumnos_Clases ( id_alumno, id_clase, calificacion)
+            VALUES( '$ultimoIdAlumno', 6, NULL)");
+        } else if ($rol_antiguo == "ALUMNO" && $rol_modificado == "ADMIN") {
+
+            $idAlumno = $this->db->query("select a.id_alumno as id_alumno, u.id_usuario,u.nombre from alumnos a
+            inner join usuarios u
+            on u.id_usuario = a.id_usuario
+            where u.id_usuario= $id");
+            $resultado = $idAlumno->fetch(PDO::FETCH_ASSOC);
+
+            $idAlumno = $resultado["id_alumno"];
+
+            $queryEliminarMAC = $this->db->query("delete from matricula_alumnos_clases where id_alumno = $idAlumno");
+            $queryEliminarAlumno = $this->db->query("delete from alumnos where id_alumno = $idAlumno");
+        } else if ($rol_antiguo == "MAESTRO" && $rol_modificado == "ALUMNO") {
+
+            $idMaestro = $this->db->query("select m.id_maestro as id_maestro, u.id_usuario,u.nombre from maestros m
+            inner join usuarios u
+            on u.id_usuario = m.id_usuario
+            where u.id_usuario= $id");
+            $resultado = $idMaestro->fetch(PDO::FETCH_ASSOC);
+
+            $idMaestro = $resultado["id_maestro"];
+
+            $queryEliminarRMC = $this->db->query("delete from relacion_maestros_clases where id_maestro = $idMaestro");
+            $queryEliminarMaestro = $this->db->query("delete from maestros where id_maestro = $idMaestro");
+
+            echo "vamos a insertar un nuevo alumno en la tabla alumnos";
+            $insertarAlumno = $this->db->query("INSERT INTO alumnos (id_usuario, fecha_nacimiento, direccion)
+            VALUES ($id, '2000-02-20', '')");
+            $ultimoIdAlumno = $this->db->lastInsertId();
+            $insertarNuevMmatricula_alumnos_clases = $this->db->query("INSERT INTO Matricula_Alumnos_Clases ( id_alumno, id_clase, calificacion)
+            VALUES( '$ultimoIdAlumno', 6, NULL)");
+        } else if ($rol_antiguo == "ALUMNO" && $rol_modificado == "MAESTRO") {
+
+            $idAlumno = $this->db->query("select a.id_alumno as id_alumno, u.id_usuario,u.nombre from alumnos a
+            inner join usuarios u
+            on u.id_usuario = a.id_usuario
+            where u.id_usuario= $id");
+            $resultado = $idAlumno->fetch(PDO::FETCH_ASSOC);
+
+            $idAlumno = $resultado["id_alumno"];
+
+            $queryEliminarMAC = $this->db->query("delete from matricula_alumnos_clases where id_alumno = $idAlumno");
+            $queryEliminarAlumno = $this->db->query("delete from alumnos where id_alumno = $idAlumno");
+
+            //echo "vamos a insertar un nuevo maestro en la tabla maestros";
+            $insertarMaestro = $this->db->query("INSERT INTO maestros (id_usuario, fecha_nacimiento, direccion)
+            VALUES ($id, '2005-02-20', '')");
+            $ultimoIdMaestro = $this->db->lastInsertId();
+            $insertarNuevaRelacionMaestroClase = $this->db->query("insert into relacion_maestros_clases (id_maestro, id_clase) values('$ultimoIdMaestro',6)");
         }
 
         header("Location: /administradores/permisos");

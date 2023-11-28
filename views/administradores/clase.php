@@ -257,7 +257,7 @@
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <p
-                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
+                                                class="block antialiased font-sans text-xs capitalize  text-blue-gray-900 font-bold">
                                                 <?= $clase["nombre_clase"] ?></p>
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
