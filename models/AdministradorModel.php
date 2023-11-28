@@ -61,7 +61,7 @@ class AdministradorModel extends Model
                                     left join   maestros m on  m.id_usuario = u.id_usuario
                                     left join relacion_maestros_clases rc on rc.id_maestro = m.id_maestro
                                     left join clases c on c.id_clase = rc.id_clase
-                                    where u.rol = 'MAESTRO' and u.activo = 1"
+                                    where u.rol = 'MAESTRO' and u.activo = 1 and u.id_usuario <> 16"
         );
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
@@ -217,16 +217,17 @@ class AdministradorModel extends Model
         $res = $this->db->query(
             "SELECT 
             c.id_clase,
+             rmc.id_relacion,
             c.nombre AS nombre_clase,
             m.id_maestro,
             CONCAT(u.nombre, ' ', u.apellido) AS nombre_maestro,
             COUNT(DISTINCT mac.id_alumno) AS cantidad_alumnos
         FROM clases c
         LEFT JOIN relacion_Maestros_Clases rmc ON c.id_clase = rmc.id_clase
-        LEFT JOIN maestros m ON rmc.id_maestro = m.id_maestro
+        inner JOIN maestros m ON rmc.id_maestro = m.id_maestro
         LEFT JOIN usuarios u ON m.id_usuario = u.id_usuario
         LEFT JOIN matricula_Alumnos_Clases mac ON c.id_clase = mac.id_clase
-        GROUP BY c.id_clase, m.id_maestro, nombre_maestro
+        GROUP BY c.id_clase, m.id_maestro, nombre_maestro,rmc.id_relacion
         ORDER BY c.id_clase"
         );
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
@@ -240,7 +241,61 @@ class AdministradorModel extends Model
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
+    public function updateClase($data)
+    {
+        $id_clase = intval($_POST["id_clase"]);
+        $id_maestroActual = intval($_POST["id_maestro"]);
+        $id_relacion = intval($_POST["id_relacion"]);
+        $nombre_clase = $_POST["nombre_clase"];
+        $maestroAsignado = intval($_POST["maestroAsignado"]);
 
+        echo "id de la clase =$id_clase, id antiguo del maestro asiganado a la clase =$id_maestroActual, nombre de la clase =$nombre_clase, id del nuevo maestro asignado=$maestroAsignado, ide relacion $id_relacion";
+
+        $modificarNombreClase = $this->db->query("UPDATE clases
+                                                SET nombre = '$nombre_clase'
+                                                WHERE id_clase = $id_clase");
+
+        if ($id_maestroActual !== $maestroAsignado) {
+            $modificarRelacionMaestroClase = $this->db->query("update relacion_maestros_clases set id_maestro= $maestroAsignado where id_relacion = $id_relacion");
+        } else {
+            $modificarRelacionMaestroClase = $this->db->query("update relacion_maestros_clases set id_maestro= $id_maestroActual where id_relacion = $id_relacion");
+        }
+
+        header("Location: /administradores/clases");
+
+        // $modificarAlumno = $this->db->prepare("update alumnos set direccion= :nuevaDireccion, fecha_nacimiento= :nuevaFecha where id_alumno = :idAlumno");
+        // $modificarAlumno->bindParam(':nuevaDireccion', $direccion);
+        // $modificarAlumno->bindParam(':nuevaFecha', $fecha);
+        // $modificarAlumno->bindParam(':idAlumno', $id_alumno);
+        // $modificarAlumno->execute();
+
+        // $modificarUsuario = $this->db->prepare("update usuarios set dni= :dni, nombre= :nomb, apellido= :ape, correo_electronico = :email  where id_usuario = :idUsuario");
+        // $modificarUsuario->bindParam(':dni', $dni);
+        // $modificarUsuario->bindParam(':nomb', $nombre);
+        // $modificarUsuario->bindParam(':ape', $apellido);
+        // $modificarUsuario->bindParam(':email', $email);
+        // $modificarUsuario->bindParam(':idUsuario', $id_usuario);
+        // $modificarUsuario->execute();
+
+        // header("Location: /administradores/alumnos");
+    }
+    public function insertClase($data)
+    {
+
+        $nombre_clase = $_POST["nombre_clase"];
+        $maestroAsignado = $_POST["maestroAsignado"]; //id del maestro asignado
+
+
+        $queryInsertClase = $this->db->query("INSERT INTO Clases ( nombre, cupo_maximo, activo)
+        VALUES( '$nombre_clase', 20, true)");
+
+        $ultimoIdClase = $this->db->lastInsertId();
+
+        $queryInsertRMC = $this->db->query("INSERT INTO Relacion_Maestros_Clases ( id_maestro, id_clase)
+        VALUES( '$maestroAsignado', '$ultimoIdClase')");
+
+        header("Location: /administradores/clases");
+    }
     // header("Location: /administradores/maestros");
 
 }

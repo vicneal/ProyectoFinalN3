@@ -70,4 +70,14 @@ class AdministradorController
         $maestros = $this->model->maestrosList();
         include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/clase.php";
     }
+    public function updateClase($request)
+    {
+
+        $this->model->updateClase($request);
+    }
+    public function insertClase($request)
+    {
+
+        $this->model->insertClase($request);
+    }
 }

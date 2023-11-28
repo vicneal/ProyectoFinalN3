@@ -21,7 +21,7 @@ class Model
      */
     public function all()
     {
-        $res = $this->db->query("select * from {$this->table}");
+        $res = $this->db->query("select * from {$this->table} where id_usuario <> 16");
         $data = $res->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }

@@ -3,9 +3,11 @@
 // ENRUTADOR
 require_once "./controllers/HomeController.php";
 require_once "./controllers/AdministradorController.php";
+require_once "./controllers/404.php";
 
 $homeController = new HomeController();
 $administradorController = new AdministradorController();
+$pagNoFoundController = new PagNoFoundController();
 
 
 $route = $_SERVER["REQUEST_URI"];
@@ -40,10 +42,14 @@ if ($method === "POST") {
             break;
         case '/administradores/updateClase':
 
-            var_dump($_POST);
+            $administradorController->updateClase($_POST);
+            break;
+        case '/administradores/insertClase':
+
+            $administradorController->insertClase($_POST);
             break;
         default:
-            echo "NO ENCONTRAMOS LA RUTA";
+            $pagNoFoundController->index();
             break;
     }
 }
@@ -79,7 +85,7 @@ if ($method === "GET") {
             //     $empleadoController->edit($_GET["id"]);
             //     break;
         default:
-            echo "NO ENCONTRAMOS LA RUTA";
+            $pagNoFoundController->index();
             break;
     }
 }
