@@ -15,7 +15,7 @@ class AdministradorModel extends Model
         return $data;
     }
 
-    public function update($data)
+    public function updateRoles($data)
     {
         $id = intval($_POST["id"]); //id del ususario
         $mail = $_POST["email"];
@@ -332,6 +332,7 @@ class AdministradorModel extends Model
         inner JOIN maestros m ON rmc.id_maestro = m.id_maestro
         LEFT JOIN usuarios u ON m.id_usuario = u.id_usuario
         LEFT JOIN matricula_Alumnos_Clases mac ON c.id_clase = mac.id_clase
+        where c.id_clase <> 6
         GROUP BY c.id_clase, m.id_maestro, nombre_maestro,rmc.id_relacion,mac.id_matricula
         ORDER BY c.id_clase"
         );
@@ -367,22 +368,6 @@ class AdministradorModel extends Model
         }
 
         header("Location: /administradores/clases");
-
-        // $modificarAlumno = $this->db->prepare("update alumnos set direccion= :nuevaDireccion, fecha_nacimiento= :nuevaFecha where id_alumno = :idAlumno");
-        // $modificarAlumno->bindParam(':nuevaDireccion', $direccion);
-        // $modificarAlumno->bindParam(':nuevaFecha', $fecha);
-        // $modificarAlumno->bindParam(':idAlumno', $id_alumno);
-        // $modificarAlumno->execute();
-
-        // $modificarUsuario = $this->db->prepare("update usuarios set dni= :dni, nombre= :nomb, apellido= :ape, correo_electronico = :email  where id_usuario = :idUsuario");
-        // $modificarUsuario->bindParam(':dni', $dni);
-        // $modificarUsuario->bindParam(':nomb', $nombre);
-        // $modificarUsuario->bindParam(':ape', $apellido);
-        // $modificarUsuario->bindParam(':email', $email);
-        // $modificarUsuario->bindParam(':idUsuario', $id_usuario);
-        // $modificarUsuario->execute();
-
-        // header("Location: /administradores/alumnos");
     }
     public function insertClase($data)
     {
@@ -403,11 +388,23 @@ class AdministradorModel extends Model
     }
     public function deleteClase($data)
     {
+        $id_clase = intval($_GET["id"]);
+        $id_rcm = intval($_GET["id_rcm"]);
+        $id_mac = intval($_GET["id_mac"]);
 
+        echo "$id_clase, $id_rcm, $id_mac";
+
+        if ($id_mac == 0) {
+            $updateRMC = $this->db->query("update relacion_maestros_clases set id_clase=6 where id_relacion =$id_rcm");
+            $deleteClase = $this->db->query("delete from clases where id_clase = $id_clase");
+        } else {
+            $updateRMC = $this->db->query("update relacion_maestros_clases set id_clase=6 where id_relacion =$id_rcm");
+            $updateMAC = $this->db->query("update matricula_Alumnos_Clases set id_clase=6, calificacion=null where id_matricula =$id_mac");
+            $deleteClase = $this->db->query("delete from clases where id_clase = $id_clase");
+        }
         //array(3) { ["id"]=> string(2) "10" ["id_rcm"]=> string(2) "35" ["id_mac"]=> string(0) "" } id_mac me da un string vacio cuandono hay alumnos inscritos en esa clase
 
-        header("Location: /administradores/alumnos");
-    }
-    // header("Location: /administradores/maestros");
 
+        header("Location: /administradores/clases");
+    }
 }

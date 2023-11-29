@@ -26,7 +26,7 @@ class AdministradorController
     public function update($request)
     {
 
-        $this->model->update($request);
+        $this->model->updateRoles($request);
     }
     /**
      * MUESTRA LA TABLA DE TODOS LOS USUARIOS

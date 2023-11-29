@@ -192,7 +192,7 @@
                 <div class="w-[95%] mx-auto flex justify-between items-center">
                     <h3
                         class="block antialiased tracking-normal font-sans text-lg capitalize font-semibold leading-relaxed mb-5">
-                        lista de alumnos</h3>
+                        lista de clases</h3>
                     <button type="" onclick='openModalInsert()'
                         class="bg-blue-500 text-white font-bold py-2 px-4 capitalize rounded mb-5  hover:bg-blue-400"><i
                             class="fa-solid fa-user-plus" style="color: #ffffff;"></i> agregar
@@ -207,7 +207,7 @@
                             <div>
                                 <h6
                                     class="block antialiased tracking-normal font-sans text-base capitalize font-semibold leading-relaxed  mb-1">
-                                    información de alumnos</h6>
+                                    información de clases</h6>
 
                             </div>
 
@@ -256,9 +256,19 @@
                                                 <?= $numeracion++ ?></p>
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
+
+                                            <?php
+                                                if ($clase["id_clase"] == 6) { ?>
                                             <p
-                                                class="block antialiased font-sans text-xs capitalize  text-blue-gray-900 font-bold">
+                                                class="inline-block py-[2px] px-[6px] rounded-md antialiased font-sans text-xs capitalize  font-bold bg-[#fcbf14]">
                                                 <?= $clase["nombre_clase"] ?></p>
+                                            <?php     } else {
+                                                ?>
+                                            <p
+                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
+                                                <?= $clase["nombre_clase"] ?></p>
+                                            <?php      }
+                                                ?>
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <?php
@@ -373,7 +383,7 @@
                 <div class="relative w-full min-w-[200px] h-10 my-8">
                     <input
                         class="peer capitalize w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-4 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                        placeholder=" " name="nombre_clase" value="" id="nombre_clase">
+                        placeholder=" " name="nombre_clase" value="" id="">
                     <label
                         class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
                         nombre de la clase</label>
@@ -382,7 +392,7 @@
                     <label for="maestroAsignado"
                         class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">Maestro
                         Asignado:</label>
-                    <select id="maestroAsignado" name="maestroAsignado"
+                    <select id="" name="maestroAsignado"
                         class="peer  w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500">
                         <option value="38" class="capitalize py-2 bg-transparent  focus:bg-slate-500 text-gray-700"
                             id="nombreMaestro">Sin Asignacion</option>
