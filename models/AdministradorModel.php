@@ -196,6 +196,7 @@ class AdministradorModel extends Model
         $nombre = $_POST["nombre"];
         $apellido = $_POST["apellido"];
         $contrasena = $_POST["dni"];
+        $contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
         //datos maestro
         $fecha = $_POST["fecha"];
         $direccion = $_POST["direccion"];
@@ -295,6 +296,7 @@ class AdministradorModel extends Model
         $apellido = $_POST["apellido"];
         $email = $_POST["email"];
         $contrasena = $_POST["dni"];
+        $contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
         //datos alumno
         $fecha = $_POST["fecha"];
         $direccion = $_POST["direccion"];

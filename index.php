@@ -4,10 +4,12 @@
 require_once "./controllers/HomeController.php";
 require_once "./controllers/AdministradorController.php";
 require_once "./controllers/404.php";
+require_once "./controllers/LoginController.php";
 
 $homeController = new HomeController();
 $administradorController = new AdministradorController();
 $pagNoFoundController = new PagNoFoundController();
+$loginController = new LoginController();
 
 
 $route = $_SERVER["REQUEST_URI"];
@@ -20,6 +22,9 @@ $method = $_SERVER["REQUEST_METHOD"];
 
 if ($method === "POST") {
     switch ($route[0]) {
+        case '/home':
+            $homeController->index($_POST);
+            break;
         case '/administradores/update':
             $administradorController->update($_POST);
 
@@ -57,7 +62,7 @@ if ($method === "GET") {
     switch ($route[0]) {
 
         case '/index.php':
-            $homeController->index();
+            $loginController->index();
             break;
         case '/administradores/permisos':
             $administradorController->read();
@@ -83,19 +88,13 @@ if ($method === "GET") {
             $administradorController->deleteClase($_GET);
 
             break;
-            // case '/index.php':
-            //     $homeController->index();
-            //     break;
+        case '/cerrarSession':
+            $homeController->cerrarsession();
 
-            // case '/empleados':
-            //     $empleadoController->index();
-            //     break;
-            // case '/empleados/create':
-            //     $empleadoController->create();
-            //     break;
-            // case '/empleados/edit':
-            //     $empleadoController->edit($_GET["id"]);
-            //     break;
+            break;
+        case '/home':
+            $homeController->home($_POST);
+            break;
         default:
             $pagNoFoundController->index();
             break;

@@ -18,7 +18,19 @@ class AdministradorController
         $usuarios = $this->model->all();
 
         $roles = $this->model->roles();
-        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/read.php";
+        session_start();
+        $rol = $_SESSION["rol"];
+        $activo = $_SESSION["activo"];
+
+        if (!isset($rol)) {
+            header("Location: ../index.php");
+        } else if (!$activo) {
+            header("Location: ../index.php");
+        } else if ($rol !== "ADMIN") {
+            header("Location: ../views/home.php");
+        } else {
+            include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/read.php";
+        }
     }
     /**
      * MUESTRA LA TABLA DE TODOS LOS USUARIOS
@@ -35,7 +47,18 @@ class AdministradorController
     {
         $maestros = $this->model->showTeachers();
         $asignaturas = $this->model->asignaturas();
-        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/maestro.php";
+        session_start();
+        $rol = $_SESSION["rol"];
+        $activo = $_SESSION["activo"];
+        if (!isset($rol)) {
+            header("Location: ../index.php");
+        } else if (!$activo) {
+            header("Location: ../index.php");
+        } else if ($rol !== "ADMIN") {
+            header("Location: ../views/home.php");
+        } else {
+            include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/maestro.php";
+        }
     }
     public function updateMaestros($request)
     {
@@ -56,7 +79,18 @@ class AdministradorController
     public function alumnosRead()
     {
         $alumnos = $this->model->showAlumnos();
-        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/alumno.php";
+        session_start();
+        $rol = $_SESSION["rol"];
+        $activo = $_SESSION["activo"];
+        if (!isset($rol)) {
+            header("Location: ../index.php");
+        } else if (!$activo) {
+            header("Location: ../index.php");
+        } else if ($rol !== "ADMIN") {
+            header("Location: ../views/home.php");
+        } else {
+            include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/alumno.php";
+        }
     }
     public function updateAlumnos($request)
     {
@@ -79,7 +113,18 @@ class AdministradorController
     {
         $clases = $this->model->readClase();
         $maestros = $this->model->maestrosList();
-        include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/clase.php";
+        session_start();
+        $rol = $_SESSION["rol"];
+        $activo = $_SESSION["activo"];
+        if (!isset($rol)) {
+            header("Location: ../index.php");
+        } else if (!$activo) {
+            header("Location: ../index.php");
+        } else if ($rol !== "ADMIN") {
+            header("Location: ../views/home.php");
+        } else {
+            include $_SERVER["DOCUMENT_ROOT"] . "/views/administradores/clase.php";
+        }
     }
     public function updateClase($request)
     {
