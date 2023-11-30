@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `universidad` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `universidad`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: universidad
@@ -30,8 +28,9 @@ CREATE TABLE `alumnos` (
   `fecha_nacimiento` date DEFAULT NULL,
   `direccion` text,
   PRIMARY KEY (`id_alumno`),
-  CONSTRAINT `alumnos_ibfk_1` FOREIGN KEY (`id_alumno`) REFERENCES `usuarios` (`id_usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_alumnos_usuarios` (`id_usuario`),
+  CONSTRAINT `fk_alumnos_usuarios` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +39,7 @@ CREATE TABLE `alumnos` (
 
 LOCK TABLES `alumnos` WRITE;
 /*!40000 ALTER TABLE `alumnos` DISABLE KEYS */;
-INSERT INTO `alumnos` VALUES (2,9,'2007-07-20','654 Birch Staa'),(3,10,'2006-04-18','987 Redwood St'),(4,11,'2004-10-25','210 Cedar St'),(5,12,'2008-01-15','303 Pine St'),(6,15,'1995-01-17','werwe');
+INSERT INTO `alumnos` VALUES (4,11,'2004-10-25','210 Cedar St'),(5,12,'2008-01-15','303 Pine St'),(21,25,'2000-02-20',''),(23,40,'1996-05-12','av.Tambopata');
 /*!40000 ALTER TABLE `alumnos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 11:27:10
+-- Dump completed on 2023-11-30 12:58:53

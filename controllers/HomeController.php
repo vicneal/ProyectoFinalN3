@@ -30,6 +30,7 @@ class HomeController
                 $_SESSION["apellido"] = $usuarioLogeo[0]["apellido"];
                 $_SESSION["rol"] = $usuarioLogeo[0]["rol"];
                 $_SESSION["activo"] = $usuarioLogeo[0]["activo"];
+                $_SESSION["id_usuario"] = $usuarioLogeo[0]["id_usuario"];
 
                 include $_SERVER["DOCUMENT_ROOT"] . "/views/home.php";
             } else {

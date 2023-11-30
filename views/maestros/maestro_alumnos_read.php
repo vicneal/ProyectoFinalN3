@@ -170,11 +170,10 @@
                 </div>
             </nav>
             <div class="mt-12">
-                <div class="w-[95%] mx-auto flex justify-between items-center">
+                <div class="w-[95%] mx-auto flex justify-start items-center">
                     <h3
                         class="block antialiased tracking-normal font-sans text-lg capitalize font-semibold leading-relaxed mb-5">
-                        dashboard</h3>
-
+                        alumnos de la clase</h3>
 
                 </div>
                 <div class="w-[95%] mx-auto">
@@ -185,11 +184,73 @@
                             <div>
                                 <h6
                                     class="block antialiased tracking-normal font-sans text-base capitalize font-semibold leading-relaxed  mb-1">
-                                    bienvenido</h6>
-                                <p>Selecciona la acción que quieras realizar en las pestañas del menu de la izquierda
-                                </p>
+                                    alumnos de clase</h6>
+
                             </div>
 
+                        </div>
+                        <div class="p-6  px-0 pt-0 pb-2">
+                            <table class="w-full min-w-[840px] table-auto ">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                                            <p
+                                                class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
+                                                #</p>
+                                        </th>
+                                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                                            <p
+                                                class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
+                                                nombre de alumno</p>
+                                        </th>
+                                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                                            <p
+                                                class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
+                                                calificación</p>
+                                        </th>
+
+                                        <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                                            <p
+                                                class="block antialiased font-sans text-[13px]  capitalize text-blue-gray-400 font-bold">
+                                                acciones</p>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $numeracion = 1;
+                                    foreach ($alumnosClase as $alumnos) {
+                                    ?>
+                                    <tr class=" hover:bg-[#c3dff9]">
+                                        <td class="py-2 px-5 border-b border-blue-gray-50">
+                                            <p class="block antialiased font-sans text-xs text-blue-gray-900 font-bold">
+                                                <?= $numeracion++ ?></p>
+                                        </td>
+                                        <td class="py-2 px-5 border-b border-blue-gray-50">
+                                            <p
+                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
+                                                <?= $alumnos["nombre_alumno"] ?> <?= $alumnos["apellido_alumno"] ?></p>
+                                        </td>
+                                        <td class="py-2 px-5 border-b border-blue-gray-50">
+                                            <p
+                                                class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
+                                                <?= $alumnos["calificacion"] ?></p>
+                                        </td>
+
+
+                                        <td class="py-2 px-5 border-b border-blue-gray-50 ">
+                                            <a href="#">
+                                                <i
+                                                    class="fa-solid fa-pen-to-square text-[18px] text-[#19d8e6] hover:text-[#6db4b9]"></i>
+
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <?php } ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

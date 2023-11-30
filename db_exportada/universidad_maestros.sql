@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `universidad` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `universidad`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: universidad
@@ -32,7 +30,7 @@ CREATE TABLE `maestros` (
   PRIMARY KEY (`id_maestro`),
   KEY `maestros_ibfk_1` (`id_usuario`),
   CONSTRAINT `maestros_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +39,7 @@ CREATE TABLE `maestros` (
 
 LOCK TABLES `maestros` WRITE;
 /*!40000 ALTER TABLE `maestros` DISABLE KEYS */;
-INSERT INTO `maestros` VALUES (26,6,'2005-02-20','werwe'),(27,3,'2005-02-20',''),(33,5,'2005-02-20',''),(34,13,'1995-01-17','105 Cedar Ste'),(35,14,'2003-02-24','werwe'),(38,16,'1980-05-15','---');
+INSERT INTO `maestros` VALUES (33,5,'2005-02-20',''),(38,16,'1980-05-15','---'),(49,7,'2005-02-20',''),(50,4,'2005-02-20',''),(51,41,'1995-06-17','');
 /*!40000 ALTER TABLE `maestros` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 11:27:10
+-- Dump completed on 2023-11-30 12:58:53

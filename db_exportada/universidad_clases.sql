@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `universidad` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `universidad`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: universidad
@@ -30,7 +28,7 @@ CREATE TABLE `clases` (
   `cupo_maximo` int DEFAULT NULL,
   `activo` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_clase`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +37,7 @@ CREATE TABLE `clases` (
 
 LOCK TABLES `clases` WRITE;
 /*!40000 ALTER TABLE `clases` DISABLE KEYS */;
-INSERT INTO `clases` VALUES (1,'Matemática Básica',20,1),(2,'Historia',25,1),(3,'Ciencias Naturales',18,0),(4,'Inglés Básico',22,1),(5,'Programación',15,0),(6,'Sin Asignación',0,1),(7,'scrum',20,1),(8,'scrum',20,1);
+INSERT INTO `clases` VALUES (1,'Matemática Básica',20,1),(2,'Historia',25,1),(3,'Ciencias Naturales',18,0),(4,'Inglés Básico',22,1),(5,'Programación',15,0),(6,'Sin Asignación',0,1),(8,'scrum',20,1),(9,'algebra',20,1);
 /*!40000 ALTER TABLE `clases` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 11:27:10
+-- Dump completed on 2023-11-30 12:58:52

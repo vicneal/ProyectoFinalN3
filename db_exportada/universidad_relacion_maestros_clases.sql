@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `universidad` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `universidad`;
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: universidad
@@ -33,7 +31,7 @@ CREATE TABLE `relacion_maestros_clases` (
   KEY `id_clase` (`id_clase`),
   CONSTRAINT `relacion_maestros_clases_ibfk_1` FOREIGN KEY (`id_maestro`) REFERENCES `maestros` (`id_maestro`),
   CONSTRAINT `relacion_maestros_clases_ibfk_2` FOREIGN KEY (`id_clase`) REFERENCES `clases` (`id_clase`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +40,7 @@ CREATE TABLE `relacion_maestros_clases` (
 
 LOCK TABLES `relacion_maestros_clases` WRITE;
 /*!40000 ALTER TABLE `relacion_maestros_clases` DISABLE KEYS */;
-INSERT INTO `relacion_maestros_clases` VALUES (13,26,3),(14,38,1),(20,33,2),(21,34,5),(22,35,4),(24,26,4),(26,38,8);
+INSERT INTO `relacion_maestros_clases` VALUES (20,33,3),(26,38,8),(27,38,9),(30,38,1),(35,38,6),(41,49,4),(42,50,6),(43,51,5);
 /*!40000 ALTER TABLE `relacion_maestros_clases` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 11:27:10
+-- Dump completed on 2023-11-30 12:58:53

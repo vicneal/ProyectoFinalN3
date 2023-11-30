@@ -5,11 +5,14 @@ require_once "./controllers/HomeController.php";
 require_once "./controllers/AdministradorController.php";
 require_once "./controllers/404.php";
 require_once "./controllers/LoginController.php";
+require_once "./controllers/MaestroController.php";
 
 $homeController = new HomeController();
 $administradorController = new AdministradorController();
 $pagNoFoundController = new PagNoFoundController();
 $loginController = new LoginController();
+$maestroController = new MaestroController();
+
 
 
 $route = $_SERVER["REQUEST_URI"];
@@ -86,6 +89,10 @@ if ($method === "GET") {
             break;
         case '/administradores/deleteClase':
             $administradorController->deleteClase($_GET);
+
+            break;
+        case '/maestros/alumnos':
+            $maestroController->maestro_alumnos_read();
 
             break;
         case '/cerrarSession':
