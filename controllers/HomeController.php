@@ -39,6 +39,7 @@ class HomeController
             }
         } else {
             // echo "NO EXISTE EL USUARIO";
+            $usuariosDefecto = $this->model->mostrarUsuariosPorDefecto();
             include $_SERVER["DOCUMENT_ROOT"] . "/views/login.php";
         }
         // include $_SERVER["DOCUMENT_ROOT"] . "/views/login.php";
