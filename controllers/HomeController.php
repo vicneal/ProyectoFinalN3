@@ -41,7 +41,7 @@ class HomeController
             // echo "NO EXISTE EL USUARIO";
             include $_SERVER["DOCUMENT_ROOT"] . "/views/login.php";
         }
-        include $_SERVER["DOCUMENT_ROOT"] . "/views/login.php";
+        // include $_SERVER["DOCUMENT_ROOT"] . "/views/login.php";
     }
     public function cerrarsession()
     {

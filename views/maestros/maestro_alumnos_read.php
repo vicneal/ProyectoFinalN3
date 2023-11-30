@@ -220,7 +220,7 @@
                                 <tbody>
                                     <?php
                                     $numeracion = 1;
-                                    foreach ($alumnosClase as $alumnos) {
+                                    foreach ($alumnosClase as $alum) {
                                     ?>
                                     <tr class=" hover:bg-[#c3dff9]">
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
@@ -230,12 +230,12 @@
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <p
                                                 class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumnos["nombre_alumno"] ?> <?= $alumnos["apellido_alumno"] ?></p>
+                                                <?= $alum["nombre_alumno"] ?> <?= $alum["apellido_alumno"] ?></p>
                                         </td>
                                         <td class="py-2 px-5 border-b border-blue-gray-50">
                                             <p
                                                 class="block antialiased font-sans text-xs  text-blue-gray-900 font-bold">
-                                                <?= $alumnos["calificacion"] ?></p>
+                                                <?= $alum["calificacion"] ?></p>
                                         </td>
 
 
